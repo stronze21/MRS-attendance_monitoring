@@ -16,7 +16,7 @@
     </script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <!-- Scripts -->
-    @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/dist/inputmask.js', 'resources/js/dist/bindings/inputmask.binding.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script type="text/javascript" src="{{ asset('instascan.min.js') }}"></script>
 
     <!-- Styles -->

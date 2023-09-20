@@ -12,24 +12,50 @@
 </x-slot>
 
 <div class="flex flex-col p-5 mx-auto">
-    <div class="justify-center grid grid-cols-12 w-full mt-2 overflow-x-auto gap-5 h-screen">
-        <div class="flex flex-col space-y-2 col-span-12 lg:col-span-8 bg-white rounded-md p-2 h-full">
-            <table class="table w-full table-compact">
+    <div class="grid justify-center w-full h-screen grid-cols-12 gap-5 mt-2 overflow-x-auto">
+        <div class="flex flex-col h-full col-span-12 p-2 space-y-2 bg-white rounded-md lg:col-span-8">
+            <div class="flex w-full">
+                <div class="grid flex-1 h-20 text-5xl font-bold card rounded-box place-items-center btn
+                @if ($for_user == 'student') btn-warning @else btn-active @endif "
+                    wire:click='$set("for_user", "student")'>
+                    For Students</div>
+                <div class="divider divider-horizontal"></div>
+                <div class="grid flex-1 h-20 text-5xl font-bold card rounded-box place-items-center btn
+                @if ($for_user == 'teacher') btn-warning @else btn-active @endif "
+                    wire:click='$set("for_user", "teacher")'>
+                    For Teachers</div>
+            </div>
+            <table class="table w-full border table-xs">
                 <thead class="uppercase">
                     <tr>
-                        <th>Student #</th>
-                        <th>Name</th>
-                        <th>Time In</th>
-                        <th>Time Out</th>
+                        <td class="text-center border" colspan="6">Recent Log</td>
+                    </tr>
+                    <tr class="border ">
+                        <th rowspan="2" class="border">{{ $for_user }} ID</th>
+                        <th rowspan="2" class="border">Name</th>
+                        <th colspan="2" class="text-center border">AM</th>
+                        <th colspan="2" class="text-center border">PM</th>
+                    </tr>
+                    <tr class="border">
+                        <th class="text-center border">Time In</th>
+                        <th class="text-center border">Time Out</th>
+                        <th class="text-center border">Time In</th>
+                        <th class="text-center border">Time Out</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse ($attendances as $attendance)
                         <tr class="hover">
-                            <th>{{ $attendance->student_id }}</th>
-                            <td>{{ $attendance->student->fullname() }}</td>
-                            <td>{{ $attendance->time_in }}</td>
-                            <td>{{ $attendance->time_out }}</td>
+                            <th class="border">{{ $attendance->student_id }}</th>
+                            <td class="border">{{ $attendance->student->fullname() }}</td>
+                            <td class="text-center border">
+                                {{ $attendance->time_in_am ? $attendance->time_in_am() : '' }}</td>
+                            <td class="text-center border">
+                                {{ $attendance->time_out_am ? $attendance->time_out_am() : '' }}</td>
+                            <td class="text-center border">
+                                {{ $attendance->time_in_pm ? $attendance->time_in_pm() : '' }}</td>
+                            <td class="text-center border">
+                                {{ $attendance->time_out_pm ? $attendance->time_out_pm() : '' }}</td>
                         </tr>
                     @empty
                         <tr>
@@ -39,14 +65,19 @@
                 </tbody>
             </table>
         </div>
-        <div class="flex flex-col space-y-2 col-span-12 lg:col-span-4 bg-white rounded-md p-2 h-full">
+        <div class="flex flex-col h-full col-span-12 p-2 space-y-2 bg-white rounded-md lg:col-span-4">
+            {{-- <div>
+                <button class="btn btn-sm" wire:click='log'>
+                    Log
+                </button>
+            </div> --}}
             <div class="flex w-full">
-                <div class="grid h-20 flex-1 card bg-success rounded-box place-items-center text-5xl font-bold btn"
-                    @if ($type == 'in') disabled @endif wire:click='$set("type", "in")'>
+                <div class="grid flex-1 h-20 text-5xl font-bold card @if ($type == 'in') btn-success @else btn-active @endif rounded-box place-items-center btn"
+                    wire:click='$set("type", "in")'>
                     Time-IN</div>
                 <div class="divider divider-horizontal"></div>
-                <div class="grid h-20 flex-1 card bg-error rounded-box place-items-center text-5xl font-bold btn"
-                    @if ($type == 'out') disabled @endif wire:click='$set("type", "out")'>
+                <div class="grid flex-1 h-20 text-5xl font-bold card @if ($type == 'out') btn-error @else btn-active @endif rounded-box place-items-center btn"
+                    wire:click='$set("type", "out")'>
                     Time-OUT</div>
             </div>
             <video id="preview"></video>
@@ -61,7 +92,16 @@
                 });
                 Instascan.Camera.getCameras().then(function(cameras) {
                     if (cameras.length > 0) {
-                        scanner.start(cameras[0]);
+                        // scanner.start(cameras[0]);
+                        var selectedCam = cameras[0];
+                        $.each(cameras, (i, c) => {
+                            if (c.name.indexOf('back') != -1) {
+                                selectedCam = c;
+                                return false;
+                            }
+                        });
+
+                        scanner.start(selectedCam);
                     } else {
                         console.error('No cameras found.');
                     }

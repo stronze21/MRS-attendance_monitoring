@@ -1,7 +1,10 @@
 <?php
 
 use App\Livewire\AttendanceInterface;
+use App\Livewire\Report\Dtr;
 use App\Livewire\StudentList;
+use App\Livewire\SystemConfigurations\SmsGateway;
+use App\Livewire\SystemConfigurations\SmsGatewayDetails;
 use App\Livewire\TeacherList;
 use Illuminate\Support\Facades\Route;
 
@@ -37,5 +40,10 @@ Route::middleware([
         Route::get('/list', TeacherList::class)->name('list');
     });
 
+    Route::prefix('/settings')->name('settings.')->group(function () {
+        Route::get('/sms', SmsGatewayDetails::class)->name('sms');
+    });
+
     Route::get('/dtr/interface', AttendanceInterface::class)->name('dtr.interface');
+    Route::get('/dtr/report', Dtr::class)->name('dtr.report');
 });
