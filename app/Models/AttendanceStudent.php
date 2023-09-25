@@ -24,22 +24,22 @@ class AttendanceStudent extends Model
         return $this->belongsTo(Student::class);
     }
 
-    public function time_in_am()
+    public function time_in_am_format()
     {
         return Carbon::parse($this->time_in_am)->format('H:i');
     }
 
-    public function time_out_am()
+    public function time_out_am_format()
     {
         return Carbon::parse($this->time_out_am)->format('H:i');
     }
 
-    public function time_in_pm()
+    public function time_in_pm_format()
     {
         return Carbon::parse($this->time_in_pm)->format('H:i');
     }
 
-    public function time_out_pm()
+    public function time_out_pm_format()
     {
         return Carbon::parse($this->time_out_pm)->format('H:i');
     }

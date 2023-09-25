@@ -77,9 +77,9 @@ class AttendanceInterface extends Component
                     $hour = Carbon::parse(now())->format('H');
 
                     if ($hour <= 12 && !$attendance->time_out_am)
-                        $time_in = $attendance->time_in_am = now();
+                        $attendance->time_in_am = $time_in = now();
                     else
-                        $time_in = $attendance->time_in_pm = now();
+                        $attendance->time_in_pm = $time_in = now();
 
                     $attendance->save();
 
@@ -93,8 +93,10 @@ class AttendanceInterface extends Component
             case "out":
                 $existing = AttendanceStudent::where('student_id', $this->id_no)
                     ->where('dtr_date', $this->dtr_date)
-                    ->whereNotNull('time_in_am')
-                    ->orWhereNotNull('time_in_pm')
+                    ->where(function($query){
+                        $query->whereNotNull('time_in_am')
+                        ->orWhereNotNull('time_in_pm');
+                    })
                     ->latest()
                     ->first();
 

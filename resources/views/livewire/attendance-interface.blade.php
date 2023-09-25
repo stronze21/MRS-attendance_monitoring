@@ -49,13 +49,13 @@
                             <th class="border">{{ $attendance->student_id }}</th>
                             <td class="border">{{ $attendance->student->fullname() }}</td>
                             <td class="text-center border">
-                                {{ $attendance->time_in_am ? $attendance->time_in_am() : '' }}</td>
+                                {{ $attendance->time_in_am ? $attendance->time_in_am_format() : '' }}</td>
                             <td class="text-center border">
-                                {{ $attendance->time_out_am ? $attendance->time_out_am() : '' }}</td>
+                                {{ $attendance->time_out_am ? $attendance->time_out_am_format() : '' }}</td>
                             <td class="text-center border">
-                                {{ $attendance->time_in_pm ? $attendance->time_in_pm() : '' }}</td>
+                                {{ $attendance->time_in_pm ? $attendance->time_in_pm_format() : '' }}</td>
                             <td class="text-center border">
-                                {{ $attendance->time_out_pm ? $attendance->time_out_pm() : '' }}</td>
+                                {{ $attendance->time_out_pm ? $attendance->time_out_pm_format() : '' }}</td>
                         </tr>
                     @empty
                         <tr>
