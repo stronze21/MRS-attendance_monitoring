@@ -56,20 +56,22 @@
                             @php
                                 $current_dte = \Carbon\Carbon::createFromDate($year, $month, $day, 'Asia/Manila')->format('Y-m-d');
                                 
-                                $dtr = App\Models\AttendanceStudent::where('student_id', '1783')
+                                $dtr = App\Models\AttendanceStudent::where('student_id', $teacher_id)
                                     ->where('dtr_date', $current_dte)
                                     ->first();
                             @endphp
                             <tr>
                                 <td class="border">{{ $day }}</td>
-                                <td class="text-center border">{{ $dtr && $dtr->time_in_am ? $dtr->time_in_am() : '' }}
+                                <td class="text-center border">
+                                    {{ $dtr && $dtr->time_in_am ? $dtr->time_in_am_format() : '' }}
                                 </td>
                                 <td class="text-center border">
-                                    {{ $dtr && $dtr->time_out_am ? $dtr->time_out_am() : '' }}</td>
-                                <td class="text-center border">{{ $dtr && $dtr->time_in_pm ? $dtr->time_in_pm() : '' }}
+                                    {{ $dtr && $dtr->time_out_am ? $dtr->time_out_am_format() : '' }}</td>
+                                <td class="text-center border">
+                                    {{ $dtr && $dtr->time_in_pm ? $dtr->time_in_pm_format() : '' }}
                                 </td>
                                 <td class="text-center border">
-                                    {{ $dtr && $dtr->time_out_pm ? $dtr->time_out_pm() : '' }}</td>
+                                    {{ $dtr && $dtr->time_out_pm ? $dtr->time_out_pm_format() : '' }}</td>
                                 <td class="text-center border"></td>
                                 <td class="text-center border"></td>
                             </tr>

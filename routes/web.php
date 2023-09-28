@@ -45,5 +45,5 @@ Route::middleware([
     });
 
     Route::get('/dtr/interface', AttendanceInterface::class)->name('dtr.interface');
-    Route::get('/dtr/report', Dtr::class)->name('dtr.report');
+    Route::get('/dtr/report/{teacher_id}', Dtr::class)->name('dtr.report');
 });

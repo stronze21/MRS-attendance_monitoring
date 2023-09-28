@@ -80,6 +80,12 @@
                     wire:click='$set("type", "out")'>
                     Time-OUT</div>
             </div>
+            <div class="flex flex-col w-full p-5">
+                <div class="text-center">
+                    <span id="date" class="text-5xl">{{ date('F j, Y') }}</span>
+                    <span id="time" class="font-bold text-9xl "></span>
+                </div>
+            </div>
             <video id="preview"></video>
             <script type="text/javascript">
                 let scanner = new Instascan.Scanner({
@@ -108,6 +114,18 @@
                 }).catch(function(e) {
                     console.error(e);
                 });
+
+                var cur_time = document.getElementById('time');
+
+                function time() {
+                    var d = new Date();
+                    var s = d.getSeconds();
+                    var m = d.getMinutes();
+                    var h = d.getHours();
+                    cur_time.textContent =
+                        ("0" + h).substr(-2) + ":" + ("0" + m).substr(-2) + ":" + ("0" + s).substr(-2);
+                }
+                setInterval(time, 1000);
             </script>
         </div>
     </div>
