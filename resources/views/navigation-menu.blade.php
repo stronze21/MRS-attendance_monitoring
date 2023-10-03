@@ -49,6 +49,9 @@
                             <x-dropdown-link href="{{ route('settings.sms') }}">
                                 {{ __('SMS Gateway') }}
                             </x-dropdown-link>
+                            <x-dropdown-link href="{{ route('settings.levels') }}">
+                                {{ __('Levels/Sections') }}
+                            </x-dropdown-link>
                         </x-slot>
                     </x-dropdown>
                 </div>

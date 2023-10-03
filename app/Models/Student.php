@@ -18,14 +18,18 @@ class Student extends Model
         'lastname',
         'firstname',
         'middlename',
-        'birthdate',
         'gender',
         'guardian_name',
-        'guardian_relationship',
         'contact_no',
         'notify_sms',
         'level_id',
         'tag',
+        'nickname',
+        'contact_no_2',
+        'address',
+        'barangay',
+        'city',
+        'province',
     ];
 
     public function fullname()
@@ -41,11 +45,6 @@ class Student extends Model
             $gender = 'Female';
 
         return $gender;
-    }
-
-    public function age()
-    {
-        return Carbon::parse($this->birthdate)->age;
     }
 
     public function level()

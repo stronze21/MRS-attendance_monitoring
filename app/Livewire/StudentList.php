@@ -4,6 +4,9 @@ namespace App\Livewire;
 
 use App\Models\Level;
 use App\Models\Student;
+use App\Models\TableBarangay;
+use App\Models\TableMunicipality;
+use App\Models\TableProvince;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -14,16 +17,23 @@ class StudentList extends Component
     use LivewireAlert;
 
     public $search;
-    public $student_id, $lastname, $middlename, $firstname, $birthdate, $gender, $guardian_name, $guardian_relationship, $contact_no, $contact_no_mask = '9', $notify_sms, $level_id;
+    public $student_id, $nickname, $lastname, $middlename, $firstname, $gender, $guardian_name, $contact_no, $contact_no_2, $contact_no_mask = '9', $notify_sms, $level_id;
+    public $address, $barangay, $city = '12', $province = '2';
     public $updating = false;
     public $levels = [];
 
     public function render()
     {
         $students = Student::paginate(20);
+        $province_table = TableProvince::all();
+        $municipality_table = TableMunicipality::where('table_province_id', $this->province)->get();
+        $barangay_table = TableBarangay::where('table_municipality_id', $this->city)->orderBy('barangay_name', 'ASC')->get();
 
         return view('livewire.student-list', compact(
             'students',
+            'province_table',
+            'municipality_table',
+            'barangay_table',
         ));
     }
 
@@ -41,12 +51,16 @@ class StudentList extends Component
             'lastname' => ['required', 'string', 'max:30'],
             'middlename' => ['nullable', 'string', 'max:30'],
             'firstname' => ['required', 'string', 'max:60'],
-            'birthdate' => ['required', 'date', 'before_or_equal:' . now()],
             'gender' => ['required', 'string', 'max:1'],
             'guardian_name' => ['required', 'string', 'max:255'],
-            'guardian_relationship' => ['required', 'string', 'max:255'],
-            'contact_no' => ['required', 'string', 'max:11'],
+            'contact_no' => ['required', 'string', 'max:11', 'max:11'],
             'level_id' => ['required', 'string', 'max:1'],
+            'nickname' => ['required', 'string', 'max:30'],
+            'contact_no_2' => ['nullable', 'string', 'max:15'],
+            'address' => ['nullable', 'string'],
+            'barangay' => ['required', 'string', 'max:80'],
+            'city' => ['required', 'string', 'max:80'],
+            'province' => ['required', 'string', 'max:80'],
         ]);
 
         $validated_data['id'] = $this->student_id;
@@ -64,14 +78,18 @@ class StudentList extends Component
         $this->lastname = $student->lastname;
         $this->middlename = $student->middlename;
         $this->firstname = $student->firstname;
-        $this->birthdate = $student->birthdate;
         $this->gender = $student->gender;
         $this->guardian_name = $student->guardian_name;
-        $this->guardian_relationship = $student->guardian_relationship;
         $this->contact_no = $student->contact_no;
+        $this->contact_no_2 = $student->contact_no_2;
+        $this->level_id = $student->level_id;
         $this->contact_no_mask = $student->contact_no;
         $this->notify_sms = $student->notify_sms == 1 ? true : false;
-        $this->level_id = $student->level_id;
+        $this->nickname = $student->nickname;
+        $this->address = $student->address;
+        $this->barangay = $student->barangay;
+        $this->city = $student->city;
+        $this->province = $student->province;
     }
 
     public function reset_data()
@@ -87,11 +105,10 @@ class StudentList extends Component
             'lastname' => ['required', 'string', 'max:30'],
             'middlename' => ['nullable', 'string', 'max:30'],
             'firstname' => ['required', 'string', 'max:60'],
-            'birthdate' => ['required', 'date', 'before_or_equal:' . now()],
             'gender' => ['required', 'string', 'max:1'],
             'guardian_name' => ['required', 'string', 'max:255'],
-            'guardian_relationship' => ['required', 'string', 'max:255'],
             'contact_no' => ['required', 'string', 'max:11'],
+            'contact_no_2' => ['nullable', 'string', 'max:11'],
             'level_id' => ['required', 'exists:levels,id'],
         ]);
 
@@ -99,11 +116,10 @@ class StudentList extends Component
         $student->lastname = $this->lastname;
         $student->middlename = $this->middlename;
         $student->firstname = $this->firstname;
-        $student->birthdate = $this->birthdate;
         $student->gender = $this->gender;
         $student->guardian_name = $this->guardian_name;
-        $student->guardian_relationship = $this->guardian_relationship;
         $student->contact_no = $this->contact_no;
+        $student->contact_no_2 = $this->contact_no_2;
         $student->notify_sms = $this->notify_sms;
         $student->level_id = $this->level_id;
         $student->save();

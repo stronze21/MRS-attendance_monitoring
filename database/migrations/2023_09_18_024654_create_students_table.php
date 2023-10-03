@@ -16,10 +16,8 @@ return new class extends Migration
             $table->string('lastname', 30);
             $table->string('firstname', 60);
             $table->string('middlename', 30)->nullable();
-            $table->date('birthdate');
             $table->enum('gender', ['m', 'f']);
             $table->string('guardian_name');
-            $table->string('guardian_relationship')->nullable();
             $table->string('contact_no', 15)->nullable();
             $table->boolean('notify_sms')->default(false);
             $table->foreignId('level_id');

@@ -5,11 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Level extends Model
+class TableProvince extends Model
 {
     use HasFactory;
-
-    protected $fillable = [
-        'description',
-    ];
 }

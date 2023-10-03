@@ -30,8 +30,6 @@
                     <tr>
                         <th>Student #</th>
                         <th>Name</th>
-                        <th>Date of Birth</th>
-                        <th>Age</th>
                         <th>Gender</th>
                         <th>Guardian</th>
                         <th>Grade Level</th>
@@ -44,17 +42,15 @@
                         <tr class="hover">
                             <th>{{ $student->id }}</th>
                             <td>{{ $student->fullname() }}</td>
-                            <td>{{ $student->birthdate }}</td>
-                            <td>{{ $student->age() }}</td>
                             <td>{{ $student->gender() }}</td>
-                            <td>{{ $student->guardian_name }} ({{ $student->guardian_relationship }})</td>
+                            <td>{{ $student->guardian_name }}</td>
                             <td>{{ $student->level->description }}</td>
                             <td>{!! $student->notify_sms
                                 ? '<i class="las la-lg la-check-square text-success"></i>'
                                 : '<i class="las la-lg la-times-circle text-error"></i>' !!}</td>
                             <td>
                                 <button class="btn btn-sm btn-warning" wire:key='select-student-{{ $student->id }}'
-                                    wire:click='select_student({{ $student->id }})'>
+                                    wire:click='select_student("{{ $student->id }}")'>
                                     <i class="las la-lg la-edit"></i></button>
                             </td>
                         </tr>
@@ -85,6 +81,17 @@
                 </div>
                 <div class="w-full col-span-12 form-control xl:col-span-4">
                     <label class="label">
+                        <span class="label-text">Last Name</span>
+                    </label>
+                    <input type="text" class="w-full input input-sm input-bordered" wire:model='lastname' />
+                    @error('lastname')
+                        <label class="label text-danger">
+                            <span class="label-text">{{ $message }}</span>
+                        </label>
+                    @enderror
+                </div>
+                <div class="w-full col-span-12 form-control xl:col-span-4">
+                    <label class="label">
                         <span class="label-text">First Name</span>
                     </label>
                     <input type="text" class="w-full input input-sm input-bordered" wire:model='firstname' />
@@ -107,21 +114,10 @@
                 </div>
                 <div class="w-full col-span-12 form-control xl:col-span-4">
                     <label class="label">
-                        <span class="label-text">Last Name</span>
+                        <span class="label-text">Nick Name</span>
                     </label>
-                    <input type="text" class="w-full input input-sm input-bordered" wire:model='lastname' />
-                    @error('lastname')
-                        <label class="label text-danger">
-                            <span class="label-text">{{ $message }}</span>
-                        </label>
-                    @enderror
-                </div>
-                <div class="w-full col-span-12 form-control xl:col-span-4">
-                    <label class="label">
-                        <span class="label-text">Date of Birth</span>
-                    </label>
-                    <input type="date" class="w-full input input-sm input-bordered" wire:model='birthdate' />
-                    @error('birthdate')
+                    <input type="text" class="w-full input input-sm input-bordered" wire:model='nickname' />
+                    @error('nickname')
                         <label class="label text-danger">
                             <span class="label-text">{{ $message }}</span>
                         </label>
@@ -158,12 +154,13 @@
                         </label>
                     @enderror
                 </div>
-                <div class="w-full col-span-12 form-control xl:col-span-8">
+                <div class="w-full col-span-12 form-control">
                     <label class="label">
-                        <span class="label-text">Guardian</span>
+                        <span class="label-text">Address <small>(House #, Street, Bldg. Name, Appartment
+                                #)</small></span>
                     </label>
-                    <input type="text" class="w-full input input-sm input-bordered" wire:model='guardian_name' />
-                    @error('guardian_name')
+                    <input type="text" class="w-full input input-sm input-bordered" wire:model='address' />
+                    @error('address')
                         <label class="label text-danger">
                             <span class="label-text">{{ $message }}</span>
                         </label>
@@ -171,11 +168,56 @@
                 </div>
                 <div class="w-full col-span-12 form-control xl:col-span-4">
                     <label class="label">
-                        <span class="label-text">Relationship</span>
+                        <span class="label-text">Province</span>
                     </label>
-                    <input type="text" class="w-full input input-sm input-bordered"
-                        wire:model='guardian_relationship' />
-                    @error('guardian_relationship')
+                    <select class="select select-sm select-bordered" wire:model='province'>
+                        @foreach ($province_table as $prov)
+                            <option value="{{ $prov->id }}">{{ $prov->province_name }}</option>
+                        @endforeach
+                    </select>
+                    @error('province')
+                        <label class="label text-danger">
+                            <span class="label-text">{{ $message }}</span>
+                        </label>
+                    @enderror
+                </div>
+                <div class="w-full col-span-12 form-control xl:col-span-4">
+                    <label class="label">
+                        <span class="label-text">Municipality/City</span>
+                    </label>
+                    <select class="select select-sm select-bordered" wire:model='city'>
+                        @foreach ($municipality_table as $mun)
+                            <option value="{{ $mun->id }}">{{ $mun->municipality_name }}</option>
+                        @endforeach
+                    </select>
+                    @error('city')
+                        <label class="label text-danger">
+                            <span class="label-text">{{ $message }}</span>
+                        </label>
+                    @enderror
+                </div>
+                <div class="w-full col-span-12 form-control xl:col-span-4">
+                    <label class="label">
+                        <span class="label-text">Barangay</span>
+                    </label>
+                    <select class="select select-sm select-bordered" wire:model='barangay'>
+                        <option value=""></option>
+                        @foreach ($barangay_table as $brg)
+                            <option value="{{ $brg->id }}">{{ $brg->barangay_name }}</option>
+                        @endforeach
+                    </select>
+                    @error('barangay')
+                        <label class="label text-danger">
+                            <span class="label-text">{{ $message }}</span>
+                        </label>
+                    @enderror
+                </div>
+                <div class="w-full col-span-12 form-control xl:col-span-8">
+                    <label class="label">
+                        <span class="label-text">Parent/Guardian</span>
+                    </label>
+                    <input type="text" class="w-full input input-sm input-bordered" wire:model='guardian_name' />
+                    @error('guardian_name')
                         <label class="label text-danger">
                             <span class="label-text">{{ $message }}</span>
                         </label>
@@ -187,6 +229,18 @@
                     </label>
                     <input type="text" class="w-full input input-sm input-bordered"
                         data-inputmask="'mask': '09 999 999 999'" wire:model='contact_no_mask' />
+                    @error('contact_no')
+                        <label class="label text-danger">
+                            <span class="label-text">{{ $message }}</span>
+                        </label>
+                    @enderror
+                </div>
+                <div class="w-full col-span-12 form-control xl:col-span-4">
+                    <label class="label">
+                        <span class="label-text">Secondary Contact #</span>
+                    </label>
+                    <input type="text" class="w-full input input-sm input-bordered"
+                        data-inputmask="'mask': '09 999 999 999'" wire:model='contact_no_2' />
                     @error('contact_no')
                         <label class="label text-danger">
                             <span class="label-text">{{ $message }}</span>
