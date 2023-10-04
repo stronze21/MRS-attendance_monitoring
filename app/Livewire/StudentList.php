@@ -94,7 +94,7 @@ class StudentList extends Component
 
     public function reset_data()
     {
-        $this->resetExcept('levels');
+        $this->resetExcept('page', 'levels', 'gender', 'level_id');
     }
 
     public function update()

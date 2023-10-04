@@ -67,7 +67,8 @@
         </div>
         <div class="flex flex-col h-full col-span-12 p-2 space-y-2 bg-white rounded-md lg:col-span-4">
             {{-- <div>
-                <button class="btn btn-sm" wire:click='log'>
+                <input type="text" class="input input-sm" wire:model="id_no" />>
+                <button class="btn btn-sm" wire:click='time_in()'>
                     Log
                 </button>
             </div> --}}

@@ -28,24 +28,24 @@ class AttendanceInterface extends Component
 
     public function send_message($number, $message)
     {
-        $ch = curl_init();
-        $parameters = array(
-            'apikey' => env('SMS_API_KEY'), //Your API KEY
-            'number' => $number,
-            'message' => $message,
-            'sendername' => 'MRSDCS'
-        );
-        curl_setopt($ch, CURLOPT_URL, 'https://semaphore.co/api/v4/messages');
-        curl_setopt($ch, CURLOPT_POST, 1);
+        // $ch = curl_init();
+        // $parameters = array(
+        //     'apikey' => env('SMS_API_KEY'), //Your API KEY
+        //     'number' => $number,
+        //     'message' => $message,
+        //     'sendername' => 'MRSDCS'
+        // );
+        // curl_setopt($ch, CURLOPT_URL, 'https://semaphore.co/api/v4/messages');
+        // curl_setopt($ch, CURLOPT_POST, 1);
 
-        //Send the parameters set above with the request
-        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($parameters));
+        // //Send the parameters set above with the request
+        // curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($parameters));
 
-        // Receive response from server
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $output = curl_exec($ch);
-        curl_close($ch);
-        return;
+        // // Receive response from server
+        // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        // $output = curl_exec($ch);
+        // curl_close($ch);
+        // return;
     }
 
     public function mount()
@@ -83,7 +83,7 @@ class AttendanceInterface extends Component
 
                     $attendance->save();
 
-                    $this->send_message($student->contact_no, $student->fullname() . ' has time-IN on ' . Carbon::parse($time_in)->format('h:i:s A'));
+                    $this->send_message($student->contact_no, $student->fullname() . ' has timed-IN on ' . Carbon::parse($time_in)->format('h:i:s A'));
                     $this->alert('success', 'Successfull Time in');
                 } else {
                     $this->alert('error', 'Your time-IN has already been logged today.');
@@ -93,9 +93,9 @@ class AttendanceInterface extends Component
             case "out":
                 $existing = AttendanceStudent::where('student_id', $this->id_no)
                     ->where('dtr_date', $this->dtr_date)
-                    ->where(function($query){
+                    ->where(function ($query) {
                         $query->whereNotNull('time_in_am')
-                        ->orWhereNotNull('time_in_pm');
+                            ->orWhereNotNull('time_in_pm');
                     })
                     ->latest()
                     ->first();
@@ -119,7 +119,7 @@ class AttendanceInterface extends Component
                         $time_out = $existing->time_out_pm = now();
 
                     $existing->save();
-                    $this->send_message($student->contact_no, $student->fullname() . ' has time-OUT on ' . Carbon::parse($time_out)->format('h:i:s A'));
+                    $this->send_message($student->contact_no, $student->fullname() . ' has timed-OUT on ' . Carbon::parse($time_out)->format('h:i:s A'));
                     $this->alert('success', 'Successfull time-OUT');
                 }
                 break;
