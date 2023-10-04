@@ -22,16 +22,46 @@ class AttendanceTeacher extends Model
 
     public function teacher()
     {
-        return $this->belongsTo(Student::class);
+        return $this->belongsTo(Teacher::class);
     }
 
-    public function time_in()
+    public function time_in_am_format()
     {
-        return Carbon::parse($this->time_in)->format('h:i A');
+        return Carbon::parse($this->time_in_am)->format('H:i');
     }
 
-    public function time_out()
+    public function time_out_am_format()
     {
-        return Carbon::parse($this->time_out)->format('h:i A');
+        return Carbon::parse($this->time_out_am)->format('H:i');
+    }
+
+    public function time_in_pm_format()
+    {
+        return Carbon::parse($this->time_in_pm)->format('H:i');
+    }
+
+    public function time_out_pm_format()
+    {
+        return Carbon::parse($this->time_out_pm)->format('H:i');
+    }
+
+    public function time_in_am_2()
+    {
+        return Carbon::parse($this->time_in_am)->format('h:i A');
+    }
+
+    public function time_out_am_2()
+    {
+        return Carbon::parse($this->time_out_am)->format('h:i A');
+    }
+
+    public function time_in_pm_2()
+    {
+        return Carbon::parse($this->time_in_pm)->format('h:i A');
+    }
+
+    public function time_out_pm_2()
+    {
+        return Carbon::parse($this->time_out_pm)->format('h:i A');
     }
 }

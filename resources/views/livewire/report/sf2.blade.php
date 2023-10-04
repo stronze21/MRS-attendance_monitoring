@@ -12,16 +12,19 @@
 </x-slot>
 
 <div class="flex flex-col p-5 mx-auto">
-    <div class="flex justify-between">
-        <div>
-            <div class="form-control">
-                <label class="input-group input-group-sm">
-                    <span><i class="las la-search"></i></span>
-                    <input type="text" placeholder="Search" class="input input-bordered input-sm"
-                        wire:model.lazy="search" />
-                </label>
-            </div>
+    <div class="flex mb-3 space-x-5">
+        <div class="form-control">
+            <label class="input-group input-group-sm">
+                <span><i class="las la-search"></i></span>
+                <input type="text" placeholder="Search" class="input input-bordered input-sm"
+                    wire:model.lazy="search" />
+            </label>
         </div>
+        <select class="select select-sm select-bordered" wire:model.live='level_id'>
+            @foreach ($levels as $level)
+                <option value="{{$level->id}}">{{$level->con_cat()}}</option>
+            @endforeach
+        </select>
     </div>
     {{-- <div class="grid justify-center w-full grid-cols-12 gap-5 mt-2 overflow-x-auto">
         <div class="flex flex-col h-full col-span-12 p-2 space-y-2 font-serif text-center bg-white rounded-md">
@@ -71,7 +74,7 @@
                         <td class="text-right">School ID</td>
                         <td class="border">413006</td>
                         <td class="text-right">School Year</td>
-                        <td class="border">2023-2024</td>
+                        <td class="border">{{$selected_level->school_year}}</td>
                         <td class="text-right">Report for the Month of</td>
                         <td class="border">October 2023</td>
                         <td class="text-right" colspan="2">Learner Attendance Conversion Tool</td>
@@ -81,9 +84,9 @@
                         <td class="text-right">School Name</td>
                         <td class="border" colspan="3">MRS Dayspring Christian School</td>
                         <td class="text-right">Grade Level</td>
-                        <td class="border">Pre Kinder</td>
+                        <td class="border">{{$selected_level->description}} ({{$selected_level->am_pm}})</td>
                         <td class="text-right" colspan="2">Section</td>
-                        <td class="border">Sunrise</td>
+                        <td class="border">{{$selected_level->section}}</td>
                     </tr>
                 </tbody>
             </table>
@@ -127,6 +130,152 @@
                     <td class="border">Absent</td>
                     <td class="border">Present</td>
                 </tr>
+                <tbody>
+                    <tr><td class="font-bold text-left uppercase border" colspan="{{ $to_day[2] + 5 }}"><span>Male</span></td></tr>
+                    @php
+                        $male_total = 0;
+                        $present_male_total = 0;
+                        $absent_male_total = 0;
+                        $male_ids = [];
+                    @endphp
+                    @foreach ($selected_level->male_students->all() as $stud)
+                        @php
+                            $absent = 0;
+                            $present = 0;
+                            $male_total++;
+                            array_push($male_ids, $stud->id);
+                        @endphp
+                        <tr>
+                            <td class="border">{{$loop->iteration}}</td>
+                            <td class="text-left border">{{$stud->fullname()}}</td>
+                            @for ($d = $from_day[2]; $d <= $to_day[2]; $d++)
+                                @php
+                                    $date_ex = explode('-', $from);
+                                    $cur_date = $date_ex[0] . '-' . $date_ex[1] . '-' . sprintf('%02d', $d);
+                                    $day_now = \Carbon\Carbon::parse($cur_date)->isoFormat('d');
+                                @endphp
+                                <td class="border">
+                                    @php
+                                        $dtr = App\Models\AttendanceStudent::where('student_id', $stud->id)
+                                            ->where('dtr_date', $cur_date)
+                                            ->first();
+                                        $holiday = App\Models\Holiday::where('date_holiday', $cur_date)->first();
+                                    @endphp
+                                    @if($dtr)
+                                        @php
+                                            $present++;
+                                            $present_male_total++;
+                                        @endphp
+                                        <span>P</span>
+                                    @elseif($day_now == 0 OR $day_now == 6 OR $holiday OR $cur_date > date('Y-m-d'))
+                                        <span>-</span>
+                                    @else
+                                        @php
+                                            $absent++;
+                                            $absent_male_total++;
+                                        @endphp
+                                    @endif
+                                </td>
+                            @endfor
+                            <td class="border">{{$absent}}</td>
+                            <td class="border">{{$present}}</td>
+                            <td class="border"></td>
+                        </tr>
+                    @endforeach
+                    <tr>
+                        <td class="border"></td>
+                        <td class="text-left border">Male Total: {{$male_total}}</td>
+                        @for ($d = $from_day[2]; $d <= $to_day[2]; $d++)
+                            @php
+                                $date_ex = explode('-', $from);
+                                $cur_date = $date_ex[0] . '-' . $date_ex[1] . '-' . sprintf('%02d', $d);
+                            @endphp
+                            <td class="border">
+                                @php
+                                    $m_total_daily = App\Models\AttendanceStudent::whereIn('student_id', $male_ids)
+                                        ->where('dtr_date', $cur_date)
+                                        ->count();
+                                @endphp
+                                {{ $m_total_daily != 0 ? $m_total_daily : '' }}
+                            </td>
+                        @endfor
+                        <td class="border">{{$absent_male_total}}</td>
+                        <td class="border">{{$present_male_total}}</td>
+                        <td class="border"></td>
+                    </tr>
+                    <tr><td class="font-bold text-left uppercase border" colspan="{{ $to_day[2] + 5 }}"><span>Female</span></td></tr>
+                    @php
+                        $female_total = 0;
+                        $present_female_total = 0;
+                        $absent_female_total = 0;
+                        $female_ids = [];
+                    @endphp
+                    @foreach ($selected_level->female_students->all() as $stud)
+                        @php
+                            $absent = 0;
+                            $present = 0;
+                            $female_total++;
+                            array_push($female_ids, $stud->id);
+                        @endphp
+                        <tr>
+                            <td class="border">{{$loop->iteration}}</td>
+                            <td class="text-left border">{{$stud->fullname()}}</td>
+                            @for ($d = $from_day[2]; $d <= $to_day[2]; $d++)
+                                @php
+                                    $date_ex = explode('-', $from);
+                                    $cur_date = $date_ex[0] . '-' . $date_ex[1] . '-' . sprintf('%02d', $d);
+                                    $day_now = \Carbon\Carbon::parse($cur_date)->isoFormat('d');
+                                @endphp
+                                <td class="border">
+                                    @php
+                                        $dtr = App\Models\AttendanceStudent::where('student_id', $stud->id)
+                                            ->where('dtr_date', $cur_date)
+                                            ->first();
+                                        $holiday = App\Models\Holiday::where('date_holiday', $cur_date)->first();
+                                    @endphp
+                                    @if($dtr)
+                                        @php
+                                            $present++;
+                                            $present_female_total++;
+                                        @endphp
+                                        <span>P</span>
+                                    @elseif($day_now == 0 OR $day_now == 6 OR $holiday OR $cur_date > date('Y-m-d'))
+                                        <span>-</span>
+                                    @else
+                                        @php
+                                            $absent++;
+                                            $absent_female_total++;
+                                        @endphp
+                                    @endif
+                                </td>
+                            @endfor
+                            <td class="border">{{$absent}}</td>
+                            <td class="border">{{$present}}</td>
+                            <td class="border"></td>
+                        </tr>
+                    @endforeach
+                    <tr>
+                        <td class="border"></td>
+                        <td class="text-left border">Female Total: {{$female_total}}</td>
+                        @for ($d = $from_day[2]; $d <= $to_day[2]; $d++)
+                            @php
+                                $date_ex = explode('-', $from);
+                                $cur_date = $date_ex[0] . '-' . $date_ex[1] . '-' . sprintf('%02d', $d);
+                            @endphp
+                            <td class="border">
+                                @php
+                                    $f_total_daily = App\Models\AttendanceStudent::whereIn('student_id', $female_ids)
+                                        ->where('dtr_date', $cur_date)
+                                        ->count();
+                                @endphp
+                                {{ $f_total_daily != 0 ? $f_total_daily : '' }}
+                            </td>
+                        @endfor
+                        <td class="border">{{$absent_female_total}}</td>
+                        <td class="border">{{$present_female_total}}</td>
+                        <td class="border"></td>
+                    </tr>
+                </tbody>
             </table>
         </div>
     </div>

@@ -142,7 +142,7 @@
                     <label class="label">
                         <span class="label-text">Grade Level</span>
                     </label>
-                    <select class="select select-sm select-bordered" wire:model='level_id'>
+                    <select class="select select-sm select-bordered" wire:model='level_id' @if($updating) disabled @endif>
                         <option value=""></option>
                         @foreach ($levels as $level)
                             <option value="{{ $level->id }}">{{ $level->description }}</option>
@@ -170,7 +170,7 @@
                     <label class="label">
                         <span class="label-text">Province</span>
                     </label>
-                    <select class="select select-sm select-bordered" wire:model='province'>
+                    <select class="select select-sm select-bordered" wire:model.live='province'>
                         @foreach ($province_table as $prov)
                             <option value="{{ $prov->id }}">{{ $prov->province_name }}</option>
                         @endforeach
@@ -185,7 +185,7 @@
                     <label class="label">
                         <span class="label-text">Municipality/City</span>
                     </label>
-                    <select class="select select-sm select-bordered" wire:model='city'>
+                    <select class="select select-sm select-bordered" wire:model.live='city'>
                         @foreach ($municipality_table as $mun)
                             <option value="{{ $mun->id }}">{{ $mun->municipality_name }}</option>
                         @endforeach

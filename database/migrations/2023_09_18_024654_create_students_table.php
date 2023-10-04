@@ -22,6 +22,7 @@ return new class extends Migration
             $table->boolean('notify_sms')->default(false);
             $table->foreignId('level_id');
             $table->string('tag')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

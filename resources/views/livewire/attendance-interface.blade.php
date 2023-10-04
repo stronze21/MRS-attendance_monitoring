@@ -46,8 +46,8 @@
                 <tbody>
                     @forelse ($attendances as $attendance)
                         <tr class="hover">
-                            <th class="border">{{ $attendance->student_id }}</th>
-                            <td class="border">{{ $attendance->student->fullname() }}</td>
+                            <th class="border">{{ $for_user == 'student' ? $attendance->student_id : $attendance->teacher_id }}</th>
+                            <td class="border">{{ $for_user == 'student' ? $attendance->student->fullname() : $attendance->teacher->fullname()}}</td>
                             <td class="text-center border">
                                 {{ $attendance->time_in_am ? $attendance->time_in_am_format() : '' }}</td>
                             <td class="text-center border">
@@ -66,12 +66,12 @@
             </table>
         </div>
         <div class="flex flex-col h-full col-span-12 p-2 space-y-2 bg-white rounded-md lg:col-span-4">
-            {{-- <div>
-                <input type="text" class="input input-sm" wire:model="id_no" />>
+            <div>
+                <input type="text" class="input input-sm input-bordered" wire:model="id_no" />
                 <button class="btn btn-sm" wire:click='time_in()'>
                     Log
                 </button>
-            </div> --}}
+            </div>
             <div class="flex w-full">
                 <div class="grid flex-1 h-20 text-5xl font-bold card @if ($type == 'in') btn-success @else btn-active @endif rounded-box place-items-center btn"
                     wire:click='$set("type", "in")'>

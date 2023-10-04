@@ -30,7 +30,12 @@
                     <tr>
                         <th>Level ID</th>
                         <th>Description</th>
-                        <th>Update</th>
+                        <th>Section</th>
+                        <th>School Year</th>
+                        <th>AM/PM</th>
+                        <th class="text-center">Active</th>
+                        <th class="w-1/12 text-center">Update</th>
+                        <th class="w-1/12 text-center">Toggle Active</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -38,10 +43,27 @@
                         <tr class="hover">
                             <th>{{ $level->id }}</th>
                             <td>{{ $level->description }}</td>
-                            <td>
+                            <td>{{ $level->section }}</td>
+                            <td>{{ $level->school_year }}</td>
+                            <td class="uppercase">{{ $level->am_pm }}</td>
+                            <td class="text-center">{!! $level->deleted_at
+                                ? '<i class="las la-lg la-times-circle text-error"></i>'
+                                : '<i class="las la-lg la-check-square text-success"></i>' !!}</td>
+                            <td class="text-center">
                                 <button class="btn btn-sm btn-warning" wire:key='select-level-{{ $level->id }}'
                                     wire:click='select_level({{ $level->id }})'>
                                     <i class="las la-lg la-edit"></i></button>
+                            </td>
+                            <td class="text-center">
+                                @if($level->deleted_at)
+                                <button class="btn btn-sm btn-primary" wire:key='activate-level-{{ $level->id }}'
+                                    wire:click='activate({{ $level->id }})'>
+                                    <i class="las la-lg la-sliders-h"></i></button>
+                                @else
+                                <button class="btn btn-sm btn-error" wire:key='deactivate-level-{{ $level->id }}'
+                                    wire:click='deactivate({{ $level->id }})'>
+                                    <i class="las la-lg la-sliders-h"></i></button>
+                                @endif
                             </td>
                         </tr>
                     @empty
@@ -62,6 +84,46 @@
                         <span class="label-text">Description</span>
                     </label>
                     <input type="text" class="w-full input input-sm input-bordered" wire:model='description' />
+                    @error('description')
+                        <label class="label text-danger">
+                            <span class="label-text">{{ $message }}</span>
+                        </label>
+                    @enderror
+                </div>
+                <div class="w-full col-span-12 form-control">
+                    <label class="label">
+                        <span class="label-text">Section</span>
+                    </label>
+                    <input type="text" class="w-full input input-sm input-bordered" wire:model='section' />
+                    @error('section')
+                        <label class="label text-danger">
+                            <span class="label-text">{{ $message }}</span>
+                        </label>
+                    @enderror
+                </div>
+                <div class="w-full col-span-12 form-control">
+                    <label class="label">
+                        <span class="label-text">School Year</span>
+                    </label>
+                    <div class="flex space-x-5">
+                        <input type="number" min="2023" class="w-full input input-sm input-bordered" wire:model='from' />
+                        <span> - </span>
+                        <input type="number" min="2030" class="w-full input input-sm input-bordered" wire:model='to' />
+                    </div>
+                    @error('description')
+                        <label class="label text-danger">
+                            <span class="label-text">{{ $message }}</span>
+                        </label>
+                    @enderror
+                </div>
+                <div class="w-full col-span-12 form-control">
+                    <label class="label">
+                        <span class="label-text">AM/PM</span>
+                    </label>
+                    <select class="select select-sm select-bordered" wire:model='am_pm'>
+                        <option value="am">AM</option>
+                        <option value="pm">PM</option>
+                    </select>
                     @error('description')
                         <label class="label text-danger">
                             <span class="label-text">{{ $message }}</span>

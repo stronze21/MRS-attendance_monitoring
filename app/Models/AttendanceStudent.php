@@ -17,6 +17,7 @@ class AttendanceStudent extends Model
         'time_out_am',
         'time_in_pm',
         'time_out_pm',
+        'level_id'
     ];
 
     public function student()

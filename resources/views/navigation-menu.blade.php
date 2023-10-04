@@ -47,7 +47,7 @@
 
                         <x-slot name="content">
                             <x-dropdown-link
-                                href="{{ route('report.sf2', ['from' => \Carbon\Carbon::parse(now())->startOfMonth(), 'to' => \Carbon\Carbon::parse(now())->endOfMonth()]) }}">
+                                href="{{ route('report.sf2', ['from' => \Carbon\Carbon::parse(now())->startOfMonth()->format('Y-m-d'), 'to' => \Carbon\Carbon::parse(now())->endOfMonth()->format('Y-m-d')]) }}">
                                 {{ __('SF2') }}
                             </x-dropdown-link>
                         </x-slot>

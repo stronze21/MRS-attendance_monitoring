@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Level;
 use App\Models\Student;
+use App\Models\StudentSection;
 use App\Models\TableBarangay;
 use App\Models\TableMunicipality;
 use App\Models\TableProvince;
@@ -21,6 +22,7 @@ class StudentList extends Component
     public $address, $barangay, $city = '12', $province = '2';
     public $updating = false;
     public $levels = [];
+    public $selected_id;
 
     public function render()
     {
@@ -65,7 +67,11 @@ class StudentList extends Component
 
         $validated_data['id'] = $this->student_id;
 
-        Student::create($validated_data);
+        $student = Student::create($validated_data);
+        StudentSection::create([
+            'student_id' => $student->id,
+            'level_id' => $this->level_id,
+        ]);
         $this->reset_data();
         $this->alert('success', 'Successfully created new student record!');
     }
@@ -90,6 +96,7 @@ class StudentList extends Component
         $this->barangay = $student->barangay;
         $this->city = $student->city;
         $this->province = $student->province;
+        $this->selected_id = $student->id;
     }
 
     public function reset_data()
@@ -102,6 +109,7 @@ class StudentList extends Component
         $this->contact_no = preg_replace('/\s+/', '', $this->contact_no_mask);
 
         $this->validate([
+            'student_id' => ['required'],
             'lastname' => ['required', 'string', 'max:30'],
             'middlename' => ['nullable', 'string', 'max:30'],
             'firstname' => ['required', 'string', 'max:60'],
@@ -109,10 +117,10 @@ class StudentList extends Component
             'guardian_name' => ['required', 'string', 'max:255'],
             'contact_no' => ['required', 'string', 'max:11'],
             'contact_no_2' => ['nullable', 'string', 'max:11'],
-            'level_id' => ['required', 'exists:levels,id'],
         ]);
 
-        $student = Student::find($this->student_id);
+        $student = Student::find($this->selected_id);
+        $student->id = $this->student_id;
         $student->lastname = $this->lastname;
         $student->middlename = $this->middlename;
         $student->firstname = $this->firstname;
@@ -121,7 +129,6 @@ class StudentList extends Component
         $student->contact_no = $this->contact_no;
         $student->contact_no_2 = $this->contact_no_2;
         $student->notify_sms = $this->notify_sms;
-        $student->level_id = $this->level_id;
         $student->save();
 
         $this->reset_data();
