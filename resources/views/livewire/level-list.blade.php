@@ -36,6 +36,7 @@
                         <th class="text-center">Active</th>
                         <th class="w-1/12 text-center">Update</th>
                         <th class="w-1/12 text-center">Toggle Active</th>
+                        <th class="w-1/12 text-center">View Class</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -55,15 +56,20 @@
                                     <i class="las la-lg la-edit"></i></button>
                             </td>
                             <td class="text-center">
-                                @if($level->deleted_at)
-                                <button class="btn btn-sm btn-primary" wire:key='activate-level-{{ $level->id }}'
-                                    wire:click='activate({{ $level->id }})'>
-                                    <i class="las la-lg la-sliders-h"></i></button>
+                                @if ($level->deleted_at)
+                                    <button class="btn btn-sm btn-primary" wire:key='activate-level-{{ $level->id }}'
+                                        wire:click='activate({{ $level->id }})'>
+                                        <i class="las la-lg la-sliders-h"></i></button>
                                 @else
-                                <button class="btn btn-sm btn-error" wire:key='deactivate-level-{{ $level->id }}'
-                                    wire:click='deactivate({{ $level->id }})'>
-                                    <i class="las la-lg la-sliders-h"></i></button>
+                                    <button class="btn btn-sm btn-error" wire:key='deactivate-level-{{ $level->id }}'
+                                        wire:click='deactivate({{ $level->id }})'>
+                                        <i class="las la-lg la-sliders-h"></i></button>
                                 @endif
+                            </td>
+                            <td class="text-center">
+                                <a class="btn btn-sm btn-success" wire:key='view-level-{{ $level->id }}'
+                                    href='{{ route('settings.levels.view', $level->id) }}'>
+                                    <i class="las la-lg la-eye"></i></a>
                             </td>
                         </tr>
                     @empty
@@ -106,9 +112,11 @@
                         <span class="label-text">School Year</span>
                     </label>
                     <div class="flex space-x-5">
-                        <input type="number" min="2023" class="w-full input input-sm input-bordered" wire:model='from' />
+                        <input type="number" min="2023" class="w-full input input-sm input-bordered"
+                            wire:model='from' />
                         <span> - </span>
-                        <input type="number" min="2030" class="w-full input input-sm input-bordered" wire:model='to' />
+                        <input type="number" min="2030" class="w-full input input-sm input-bordered"
+                            wire:model='to' />
                     </div>
                     @error('description')
                         <label class="label text-danger">

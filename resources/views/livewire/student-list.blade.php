@@ -25,7 +25,7 @@
     </div>
     <div class="grid justify-center w-full h-screen grid-cols-12 gap-5 mt-2 overflow-x-auto">
         <div class="flex flex-col h-full col-span-12 p-2 space-y-2 bg-white rounded-md lg:col-span-8">
-            <table class="table w-full table-compact">
+            <table class="table w-full table-xs">
                 <thead class="uppercase">
                     <tr>
                         <th>Student #</th>
@@ -142,7 +142,8 @@
                     <label class="label">
                         <span class="label-text">Grade Level</span>
                     </label>
-                    <select class="select select-sm select-bordered" wire:model='level_id' @if($updating) disabled @endif>
+                    <select class="select select-sm select-bordered" wire:model='level_id'
+                        @if ($updating) disabled @endif>
                         <option value=""></option>
                         @foreach ($levels as $level)
                             <option value="{{ $level->id }}">{{ $level->description }}</option>

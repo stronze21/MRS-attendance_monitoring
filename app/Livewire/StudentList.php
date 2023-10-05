@@ -26,7 +26,7 @@ class StudentList extends Component
 
     public function render()
     {
-        $students = Student::paginate(20);
+        $students = Student::paginate(15);
         $province_table = TableProvince::all();
         $municipality_table = TableMunicipality::where('table_province_id', $this->province)->get();
         $barangay_table = TableBarangay::where('table_municipality_id', $this->city)->orderBy('barangay_name', 'ASC')->get();
@@ -133,5 +133,16 @@ class StudentList extends Component
 
         $this->reset_data();
         $this->alert('success', 'Successfully updated student record!');
+    }
+
+    public function set_class()
+    {
+        $student = Student::all();
+        foreach ($student as $student) {
+            StudentSection::create([
+                'student_id' => $student->id,
+                'level_id' => $student->level_id,
+            ]);
+        }
     }
 }

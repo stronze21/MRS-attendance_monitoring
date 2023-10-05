@@ -22,9 +22,10 @@
         </div>
         <select class="select select-sm select-bordered" wire:model.live='level_id'>
             @foreach ($levels as $level)
-                <option value="{{$level->id}}">{{$level->con_cat()}}</option>
+                <option value="{{ $level->id }}">{{ $level->con_cat() }}</option>
             @endforeach
         </select>
+        <button class="btn btn-sm btn-primary" onclick="printDiv()"><i class="las la-lg la-print"></i> Print</button>
     </div>
     {{-- <div class="grid justify-center w-full grid-cols-12 gap-5 mt-2 overflow-x-auto">
         <div class="flex flex-col h-full col-span-12 p-2 space-y-2 font-serif text-center bg-white rounded-md">
@@ -64,9 +65,11 @@
             </div>
         </div>
     </div> --}}
-    <div class="flex flex-col h-full col-span-12 p-2 space-y-2 font-serif text-center bg-white rounded-md">
-        <span class="text-2xl font-black"> School Form 2 (SF2) Daily Attendance Report of Learners </span>
-        <span class="text-xs">(This replaces Form 1, Form 2 & STS Form 4 - Absenteeism and Dropout Profile)</span>
+    <div class="flex flex-col h-full col-span-12 p-2 space-y-2 font-serif text-center bg-white rounded-md"
+        id="GFG">
+        <div class="text-2xl font-black text-center"> School Form 2 (SF2) Daily Attendance Report of Learners </div>
+        <div class="text-xs text-center">(This replaces Form 1, Form 2 & STS Form 4 - Absenteeism and Dropout Profile)
+        </div>
         <div class="w-full p-5">
             <table class="table border-0 table-fixed table-xs">
                 <tbody>
@@ -74,7 +77,7 @@
                         <td class="text-right">School ID</td>
                         <td class="border">413006</td>
                         <td class="text-right">School Year</td>
-                        <td class="border">{{$selected_level->school_year}}</td>
+                        <td class="border">{{ $selected_level->school_year }}</td>
                         <td class="text-right">Report for the Month of</td>
                         <td class="border">October 2023</td>
                         <td class="text-right" colspan="2">Learner Attendance Conversion Tool</td>
@@ -84,9 +87,9 @@
                         <td class="text-right">School Name</td>
                         <td class="border" colspan="3">MRS Dayspring Christian School</td>
                         <td class="text-right">Grade Level</td>
-                        <td class="border">{{$selected_level->description}} ({{$selected_level->am_pm}})</td>
+                        <td class="border">{{ $selected_level->description }} ({{ $selected_level->am_pm }})</td>
                         <td class="text-right" colspan="2">Section</td>
-                        <td class="border">{{$selected_level->section}}</td>
+                        <td class="border">{{ $selected_level->section }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -131,7 +134,11 @@
                     <td class="border">Present</td>
                 </tr>
                 <tbody>
-                    <tr><td class="font-bold text-left uppercase border" colspan="{{ $to_day[2] + 5 }}"><span>Male</span></td></tr>
+                    <tr>
+                        <td class="font-bold text-left uppercase border" colspan="{{ $to_day[2] + 5 }}">
+                            <span>Male</span>
+                        </td>
+                    </tr>
                     @php
                         $male_total = 0;
                         $present_male_total = 0;
@@ -146,8 +153,8 @@
                             array_push($male_ids, $stud->id);
                         @endphp
                         <tr>
-                            <td class="border">{{$loop->iteration}}</td>
-                            <td class="text-left border">{{$stud->fullname()}}</td>
+                            <td class="border">{{ $loop->iteration }}</td>
+                            <td class="text-left border">{{ $stud->fullname() }}</td>
                             @for ($d = $from_day[2]; $d <= $to_day[2]; $d++)
                                 @php
                                     $date_ex = explode('-', $from);
@@ -161,13 +168,13 @@
                                             ->first();
                                         $holiday = App\Models\Holiday::where('date_holiday', $cur_date)->first();
                                     @endphp
-                                    @if($dtr)
+                                    @if ($dtr)
                                         @php
                                             $present++;
                                             $present_male_total++;
                                         @endphp
                                         <span>P</span>
-                                    @elseif($day_now == 0 OR $day_now == 6 OR $holiday OR $cur_date > date('Y-m-d'))
+                                    @elseif($day_now == 0 or $day_now == 6 or $holiday or $cur_date > date('Y-m-d'))
                                         <span>-</span>
                                     @else
                                         @php
@@ -177,14 +184,14 @@
                                     @endif
                                 </td>
                             @endfor
-                            <td class="border">{{$absent}}</td>
-                            <td class="border">{{$present}}</td>
+                            <td class="border">{{ $absent }}</td>
+                            <td class="border">{{ $present }}</td>
                             <td class="border"></td>
                         </tr>
                     @endforeach
                     <tr>
                         <td class="border"></td>
-                        <td class="text-left border">Male Total: {{$male_total}}</td>
+                        <td class="text-left border">Male Total: {{ $male_total }}</td>
                         @for ($d = $from_day[2]; $d <= $to_day[2]; $d++)
                             @php
                                 $date_ex = explode('-', $from);
@@ -199,11 +206,15 @@
                                 {{ $m_total_daily != 0 ? $m_total_daily : '' }}
                             </td>
                         @endfor
-                        <td class="border">{{$absent_male_total}}</td>
-                        <td class="border">{{$present_male_total}}</td>
+                        <td class="border">{{ $absent_male_total }}</td>
+                        <td class="border">{{ $present_male_total }}</td>
                         <td class="border"></td>
                     </tr>
-                    <tr><td class="font-bold text-left uppercase border" colspan="{{ $to_day[2] + 5 }}"><span>Female</span></td></tr>
+                    <tr>
+                        <td class="font-bold text-left uppercase border" colspan="{{ $to_day[2] + 5 }}">
+                            <span>Female</span>
+                        </td>
+                    </tr>
                     @php
                         $female_total = 0;
                         $present_female_total = 0;
@@ -218,8 +229,8 @@
                             array_push($female_ids, $stud->id);
                         @endphp
                         <tr>
-                            <td class="border">{{$loop->iteration}}</td>
-                            <td class="text-left border">{{$stud->fullname()}}</td>
+                            <td class="border">{{ $loop->iteration }}</td>
+                            <td class="text-left border">{{ $stud->fullname() }}</td>
                             @for ($d = $from_day[2]; $d <= $to_day[2]; $d++)
                                 @php
                                     $date_ex = explode('-', $from);
@@ -233,13 +244,13 @@
                                             ->first();
                                         $holiday = App\Models\Holiday::where('date_holiday', $cur_date)->first();
                                     @endphp
-                                    @if($dtr)
+                                    @if ($dtr)
                                         @php
                                             $present++;
                                             $present_female_total++;
                                         @endphp
                                         <span>P</span>
-                                    @elseif($day_now == 0 OR $day_now == 6 OR $holiday OR $cur_date > date('Y-m-d'))
+                                    @elseif($day_now == 0 or $day_now == 6 or $holiday or $cur_date > date('Y-m-d'))
                                         <span>-</span>
                                     @else
                                         @php
@@ -249,14 +260,14 @@
                                     @endif
                                 </td>
                             @endfor
-                            <td class="border">{{$absent}}</td>
-                            <td class="border">{{$present}}</td>
+                            <td class="border">{{ $absent }}</td>
+                            <td class="border">{{ $present }}</td>
                             <td class="border"></td>
                         </tr>
                     @endforeach
                     <tr>
                         <td class="border"></td>
-                        <td class="text-left border">Female Total: {{$female_total}}</td>
+                        <td class="text-left border">Female Total: {{ $female_total }}</td>
                         @for ($d = $from_day[2]; $d <= $to_day[2]; $d++)
                             @php
                                 $date_ex = explode('-', $from);
@@ -271,8 +282,8 @@
                                 {{ $f_total_daily != 0 ? $f_total_daily : '' }}
                             </td>
                         @endfor
-                        <td class="border">{{$absent_female_total}}</td>
-                        <td class="border">{{$present_female_total}}</td>
+                        <td class="border">{{ $absent_female_total }}</td>
+                        <td class="border">{{ $present_female_total }}</td>
                         <td class="border"></td>
                     </tr>
                 </tbody>
@@ -280,3 +291,20 @@
         </div>
     </div>
 </div>
+
+@push('scripts')
+    <!-- Script to print the content of a div -->
+    <script>
+        function printDiv() {
+            var printContents = document.getElementById('GFG').innerHTML;
+            var originalContents = document.body.innerHTML;
+
+            document.body.innerHTML = printContents;
+
+            window.print();
+
+            document.body.innerHTML = originalContents;
+            history.go(-1);
+        }
+    </script>
+@endpush

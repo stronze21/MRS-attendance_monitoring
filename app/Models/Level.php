@@ -22,8 +22,14 @@ class Level extends Model
 
     public function con_cat()
     {
-        return $this->description.' '.$this->school_year.' ('.$this->am_pm.')';
+        return $this->description . ' ' . $this->school_year . ' (' . $this->am_pm . ')';
     }
+
+    public function students()
+    {
+        return $this->hasMany(Student::class);
+    }
+
 
     public function male_students()
     {

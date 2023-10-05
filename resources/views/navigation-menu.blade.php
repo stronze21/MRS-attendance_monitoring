@@ -24,6 +24,14 @@
                         {{ __('Teachers') }}
                     </x-nav-link>
 
+                    <x-nav-link href="{{ route('settings.levels') }}" :active="request()->routeIs('settings.levels')">
+                        {{ __('Class/Section') }}
+                    </x-nav-link>
+
+                    <x-nav-link href="{{ route('settings.holidays') }}" :active="request()->routeIs('settings.holidays')">
+                        {{ __('Holidays') }}
+                    </x-nav-link>
+
                     <x-nav-link href="{{ route('dtr.interface') }}" :active="request()->routeIs('dtr.interface')">
                         {{ __('DTR Interface') }}
                     </x-nav-link>
@@ -47,7 +55,7 @@
 
                         <x-slot name="content">
                             <x-dropdown-link
-                                href="{{ route('report.sf2', ['from' => \Carbon\Carbon::parse(now())->startOfMonth()->format('Y-m-d'), 'to' => \Carbon\Carbon::parse(now())->endOfMonth()->format('Y-m-d')]) }}">
+                                href="{{ route('report.sf2', ['from' => \Carbon\Carbon::parse(now())->startOfMonth()->format('Y-m-d'),'to' => \Carbon\Carbon::parse(now())->endOfMonth()->format('Y-m-d')]) }}">
                                 {{ __('SF2') }}
                             </x-dropdown-link>
                         </x-slot>
@@ -70,9 +78,6 @@
                         <x-slot name="content">
                             <x-dropdown-link href="{{ route('settings.sms') }}">
                                 {{ __('SMS Gateway') }}
-                            </x-dropdown-link>
-                            <x-dropdown-link href="{{ route('settings.levels') }}">
-                                {{ __('Levels/Sections') }}
                             </x-dropdown-link>
                         </x-slot>
                     </x-dropdown>
