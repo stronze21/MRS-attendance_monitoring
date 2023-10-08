@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('attendance_students', function (Blueprint $table) {
             $table->id();
             $table->date('dtr_date');
-            $table->foreignId('student_id');
+            $table->string('student_id');
             $table->dateTime('time_in_am')->nullable();
             $table->dateTime('time_out_am')->nullable();
             $table->dateTime('time_in_pm')->nullable();

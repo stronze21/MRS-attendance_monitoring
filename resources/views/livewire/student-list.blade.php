@@ -72,7 +72,7 @@
                     <label class="label">
                         <span class="label-text">ID No.</span>
                     </label>
-                    <input type="text" class="w-full input input-sm input-bordered" wire:model='student_id' />
+                    <input type="text" class="w-full input input-sm input-bordered" wire:model='student_id' {{ $updating ? 'disabled' : '' }} />
                     @error('student_id')
                         <label class="label text-danger">
                             <span class="label-text">{{ $message }}</span>

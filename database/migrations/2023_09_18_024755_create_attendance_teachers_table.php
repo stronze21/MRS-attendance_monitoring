@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('attendance_teachers', function (Blueprint $table) {
             $table->id();
             $table->date('dtr_date');
-            $table->foreignId('teacher_id');
+            $table->string('teacher_id');
             $table->dateTime('time_in_am')->nullable();
             $table->dateTime('time_out_am')->nullable();
             $table->dateTime('time_in_pm')->nullable();

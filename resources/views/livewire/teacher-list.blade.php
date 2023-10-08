@@ -34,7 +34,6 @@
                         <th>Age</th>
                         <th>Gender</th>
                         <th>Contact #</th>
-                        <th>Years in Service</th>
                         <th class="text-center">Update</th>
                         <th class="text-center">DTR</th>
                     </tr>
@@ -48,7 +47,6 @@
                             <td>{{ $teacher->age() }}</td>
                             <td>{{ $teacher->gender() }}</td>
                             <td>{{ $teacher->contact_no }}</td>
-                            <td>{{ $teacher->age_service() }}</td>
                             <td class="text-center">
                                 <button class="btn btn-sm btn-warning" wire:key='select-teacher-{{ $teacher->id }}'
                                     wire:click='select_teacher({{ $teacher->id }})'>
@@ -78,7 +76,7 @@
                     <label class="label">
                         <span class="label-text">ID No.</span>
                     </label>
-                    <input type="text" class="w-full input input-sm input-bordered" wire:model='teacher_id' />
+                    <input type="text" class="w-full input input-sm input-bordered" wire:model='teacher_id'  {{ $updating ? 'disabled' : '' }}/>
                     @error('teacher_id')
                         <label class="label text-danger">
                             <span class="label-text">{{ $message }}</span>
@@ -151,17 +149,6 @@
                     <input type="text" class="w-full input input-sm input-bordered"
                         data-inputmask="'mask': '09 999 999 999'" wire:model='contact_no_mask' />
                     @error('contact_no')
-                        <label class="label text-danger">
-                            <span class="label-text">{{ $message }}</span>
-                        </label>
-                    @enderror
-                </div>
-                <div class="w-full col-span-12 form-control xl:col-span-4">
-                    <label class="label">
-                        <span class="label-text">Date appointed</span>
-                    </label>
-                    <input type="date" class="w-full input input-sm input-bordered" wire:model='appointment_date' />
-                    @error('appointment_date')
                         <label class="label text-danger">
                             <span class="label-text">{{ $message }}</span>
                         </label>

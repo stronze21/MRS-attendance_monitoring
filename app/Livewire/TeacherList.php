@@ -38,7 +38,6 @@ class TeacherList extends Component
             'gender' => ['required', 'string', 'max:1'],
             'contact_no' => ['required', 'string', 'max:11'],
             'address' => ['nullable', 'string'],
-            'appointment_date' => ['required', 'date', 'before_or_equal:' . now()],
         ]);
 
         $validated_data['id'] = $this->teacher_id;
@@ -61,7 +60,6 @@ class TeacherList extends Component
         $this->contact_no = $teacher->contact_no;
         $this->contact_no_mask = $teacher->contact_no;
         $this->address = $teacher->address;
-        $this->appointment_date = $teacher->appointment_date;
     }
 
     public function reset_data()
@@ -81,7 +79,6 @@ class TeacherList extends Component
             'gender' => ['required', 'string', 'max:1'],
             'contact_no' => ['required', 'string', 'max:11'],
             'address' => ['nullable', 'string'],
-            'appointment_date' => ['required', 'date', 'before_or_equal:' . now()],
         ]);
 
         $teacher = Teacher::find($this->teacher_id);
@@ -92,7 +89,6 @@ class TeacherList extends Component
         $teacher->gender = $this->gender;
         $teacher->contact_no = $this->contact_no;
         $teacher->address = $this->address;
-        $teacher->appointment_date = $this->appointment_date;
         $teacher->save();
 
         $this->reset_data();

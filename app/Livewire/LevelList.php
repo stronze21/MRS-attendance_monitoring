@@ -64,7 +64,7 @@ class LevelList extends Component
     public function update()
     {
         $this->validate([
-            'description' => ['required', 'unique:levels,description'],
+            'description' => ['required'],
         ]);
         $level = Level::find($this->level_id);
         $level->description = $this->description;

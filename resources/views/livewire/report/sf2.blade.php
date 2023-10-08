@@ -15,9 +15,8 @@
     <div class="flex mb-3 space-x-5">
         <div class="form-control">
             <label class="input-group input-group-sm">
-                <span><i class="las la-search"></i></span>
-                <input type="text" placeholder="Search" class="input input-bordered input-sm"
-                    wire:model.lazy="search" />
+                <input type="month" class="input input-bordered input-sm"
+                    wire:model.lazy="month" />
             </label>
         </div>
         <select class="select select-sm select-bordered" wire:model.live='level_id'>
@@ -27,44 +26,6 @@
         </select>
         <button class="btn btn-sm btn-primary" onclick="printDiv()"><i class="las la-lg la-print"></i> Print</button>
     </div>
-    {{-- <div class="grid justify-center w-full grid-cols-12 gap-5 mt-2 overflow-x-auto">
-        <div class="flex flex-col h-full col-span-12 p-2 space-y-2 font-serif text-center bg-white rounded-md">
-            <span class="text-2xl font-black"> School Form 2 (SF2) Daily Attendance Report of Learners </span>
-            <span class="text-xs">(This replaces Form 1, Form 2 & STS Form 4 - Absenteeism and Dropout Profile)</span>
-            <div class="grid grid-cols-12 gap-5">
-                <div class="flex col-span-2">
-                    <span class="py-1 ml-10 text-xs"> School ID </span>
-                    <div class="px-1 ml-1 border">413006</div>
-                </div>
-                <div class="flex col-span-2">
-                    <span class="py-1 ml-10 text-xs"> School Year </span>
-                    <div class="px-1 ml-1 border">2023-2024</div>
-                </div>
-                <div class="flex col-span-4">
-                    <span class="py-1 ml-10 text-xs"> Report for the Month of </span>
-                    <div class="px-1 ml-1 border">2023-2024</div>
-                </div>
-                <div class="flex col-span-4">
-                    <span class="py-1 ml-10 text-xs"> Learner Attendance Conversion Tool </span>
-                    <div class="px-1 ml-1 border"></div>
-                </div>
-            </div>
-            <div class="grid grid-cols-12 gap-5">
-                <div class="flex col-span-4">
-                    <span class="py-1 ml-10 text-xs"> Name of School </span>
-                    <div class="px-1 ml-1 border"> MRS Dayspring Christian School</div>
-                </div>
-                <div class="flex col-span-4">
-                    <span class="py-1 ml-10 text-xs"> Grade Level </span>
-                    <div class="px-1 ml-1 border"> PreKinder</div>
-                </div>
-                <div class="flex col-span-4">
-                    <span class="py-1 ml-10 text-xs"> Section </span>
-                    <div class="px-1 ml-1 border"> Sunrise</div>
-                </div>
-            </div>
-        </div>
-    </div> --}}
     <div class="flex flex-col h-full col-span-12 p-2 space-y-2 font-serif text-center bg-white rounded-md"
         id="GFG">
         <div class="text-2xl font-black text-center"> School Form 2 (SF2) Daily Attendance Report of Learners </div>
@@ -79,7 +40,7 @@
                         <td class="text-right">School Year</td>
                         <td class="border">{{ $selected_level->school_year }}</td>
                         <td class="text-right">Report for the Month of</td>
-                        <td class="border">October 2023</td>
+                        <td class="border">{{$current_month}}</td>
                         <td class="text-right" colspan="2">Learner Attendance Conversion Tool</td>
                         <td class="border"></td>
                     </tr>
@@ -173,10 +134,11 @@
                                             $present++;
                                             $present_male_total++;
                                         @endphp
-                                        <span>P</span>
+                                        <span>/</span>
                                     @elseif($day_now == 0 or $day_now == 6 or $holiday or $cur_date > date('Y-m-d'))
                                         <span>-</span>
                                     @else
+                                        <span>x</span>
                                         @php
                                             $absent++;
                                             $absent_male_total++;
@@ -247,15 +209,16 @@
                                     @if ($dtr)
                                         @php
                                             $present++;
-                                            $present_female_total++;
+                                            $present_male_total++;
                                         @endphp
-                                        <span>P</span>
+                                        <span>/</span>
                                     @elseif($day_now == 0 or $day_now == 6 or $holiday or $cur_date > date('Y-m-d'))
                                         <span>-</span>
                                     @else
+                                        <span>x</span>
                                         @php
                                             $absent++;
-                                            $absent_female_total++;
+                                            $absent_male_total++;
                                         @endphp
                                     @endif
                                 </td>

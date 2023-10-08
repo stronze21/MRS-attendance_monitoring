@@ -22,7 +22,6 @@ class Teacher extends Model
         'gender',
         'contact_no',
         'address',
-        'appointment_date',
     ];
 
     public function fullname()
@@ -43,10 +42,5 @@ class Teacher extends Model
     public function age()
     {
         return Carbon::parse($this->birthdate)->age;
-    }
-
-    public function age_service()
-    {
-        return Carbon::parse($this->appointment_date)->age;
     }
 }
