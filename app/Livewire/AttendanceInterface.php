@@ -19,6 +19,13 @@ class AttendanceInterface extends Component
 
     public $dtr_date, $id_no, $type = 'in', $for_user = 'student';
 
+    public function updatedIdNo()
+    {
+        $id = explode('=', $this->id_no);
+        $this->id_no = implode('-', $id);
+        $this->time_in();
+    }
+
     public function render()
     {
         $attendances = $this->for_user == 'student' ?
@@ -70,7 +77,6 @@ class AttendanceInterface extends Component
     public function time_in()
     {
         $id_no = implode("", explode('http://', $this->id_no));
-
         switch ($this->for_user){
             case "teacher":
                 switch ($this->type) {
@@ -213,5 +219,6 @@ class AttendanceInterface extends Component
                         break;
                 }
         }
+        $this->reset('id_no');
     }
 }

@@ -105,7 +105,7 @@
                 </div>
             </div>
             <div class="flex space-x-2">
-                <input type="text" class="w-full input input-sm input-bordered input-primary" placeholder="ID #" wire:model.live.debounce.150ms="id_no" />
+                <input type="text" id="id_no" class="w-full input input-sm input-bordered input-primary" placeholder="ID #" wire:model.live.debounce.150ms="id_no" />
                 <button class="btn btn-sm btn-primary" wire:click='time_in()'>
                     Manual Log
                 </button>
@@ -154,6 +154,14 @@
                         ("0" + h).substr(-2) + ":" + ("0" + m).substr(-2) + ":" + ("0" + s).substr(-2);
                 }
                 setInterval(time, 1000);
+                document.getElementById('id_no').focus();
+
+                document.getElementById('id_no').onblur = function (event) {
+                    var blurEl = this;
+                    setTimeout(function() {
+                        blurEl.focus()
+                    }, 10);
+                };
             </script>
         </div>
     </div>
