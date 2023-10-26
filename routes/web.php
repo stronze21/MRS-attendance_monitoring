@@ -6,6 +6,7 @@ use App\Livewire\LevelList;
 use App\Livewire\Report\Dtr;
 use App\Livewire\Report\Sf2;
 use App\Livewire\StudentList;
+use App\Livewire\SystemConfigurations\SmsCounterReport;
 use App\Livewire\SystemConfigurations\SmsGateway;
 use App\Livewire\SystemConfigurations\SmsGatewayDetails;
 use App\Livewire\TeacherList;
@@ -53,6 +54,7 @@ Route::middleware([
 
     Route::prefix('/report')->name('report.')->group(function () {
         Route::get('/Daily-Attendance-Report-for-Learners/{from}/{to}', Sf2::class)->name('sf2');
+        Route::get('/sms-record', SmsCounterReport::class)->name('sms');
     });
 
     Route::get('/dtr/interface', AttendanceInterface::class)->name('dtr.interface');

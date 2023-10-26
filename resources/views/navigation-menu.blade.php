@@ -12,9 +12,9 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
+                    {{-- <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
-                    </x-nav-link>
+                    </x-nav-link> --}}
 
                     <x-nav-link href="{{ route('student.list') }}" :active="request()->routeIs('student.list')">
                         {{ __('Students') }}
@@ -57,6 +57,9 @@
                             <x-dropdown-link
                                 href="{{ route('report.sf2', ['from' => \Carbon\Carbon::parse(now())->startOfMonth()->format('Y-m-d'),'to' => \Carbon\Carbon::parse(now())->endOfMonth()->format('Y-m-d')]) }}">
                                 {{ __('SF2') }}
+                            </x-dropdown-link>
+                            <x-dropdown-link href="{{ route('report.sms') }}">
+                                {{ __('SMS Sent Counter') }}
                             </x-dropdown-link>
                         </x-slot>
                     </x-dropdown>
@@ -154,8 +157,20 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
+            <x-responsive-nav-link href="{{ route('student.list') }}" :active="request()->routeIs('student.list')">
+                {{ __('Students') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link href="{{ route('teacher.list') }}" :active="request()->routeIs('teacher.list')">
+                {{ __('Teachers') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link href="{{ route('settings.levels') }}" :active="request()->routeIs('settings.levels')">
+                {{ __('Class/Section') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link href="{{ route('settings.holidays') }}" :active="request()->routeIs('settings.holidays')">
+                {{ __('Holidays') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link href="{{ route('dtr.interface') }}" :active="request()->routeIs('dtr.interface')">
+                {{ __('DTR Interface') }}
             </x-responsive-nav-link>
         </div>
 
