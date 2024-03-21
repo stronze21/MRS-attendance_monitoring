@@ -77,7 +77,7 @@ class AttendanceInterface extends Component
     public function time_in()
     {
         $id_no = implode("", explode('http://', $this->id_no));
-        switch ($this->for_user){
+        switch ($this->for_user) {
             case "teacher":
                 switch ($this->type) {
                     case "in":
@@ -88,7 +88,7 @@ class AttendanceInterface extends Component
 
                         if (!$existing or ($existing and $existing->time_in_am and $existing->time_out_am and !$existing->time_in_pm and !$existing->time_out_pm)) {
                             $teacher = Teacher::find($id_no);
-                            if($teacher){
+                            if ($teacher) {
                                 $attendance = AttendanceTeacher::firstOrCreate([
                                     'teacher_id' => $id_no,
                                     'dtr_date' => $this->dtr_date,
@@ -103,9 +103,9 @@ class AttendanceInterface extends Component
                                 $attendance->save();
 
                                 $this->alert('success', 'Successfull Time in');
-                            }else{
-                                    $this->alert('error', 'ID not found.');
-                                }
+                            } else {
+                                $this->alert('error', 'ID not found.');
+                            }
                         } else {
                             $this->alert('error', 'Your time-IN has already been logged today.');
                         }
@@ -155,7 +155,7 @@ class AttendanceInterface extends Component
 
                         if (!$existing or ($existing and $existing->time_in_am and $existing->time_out_am and !$existing->time_in_pm and !$existing->time_out_pm)) {
                             $student = Student::find($id_no);
-                            if($student){
+                            if ($student) {
                                 $attendance = AttendanceStudent::firstOrCreate([
                                     'student_id' => $id_no,
                                     'dtr_date' => $this->dtr_date,
@@ -170,11 +170,11 @@ class AttendanceInterface extends Component
 
                                 $attendance->save();
 
-                                if($student->notify_sms){
+                                if ($student->notify_sms) {
                                     $this->send_message($student->contact_no, $student->fullname() . ' has timed-IN on ' . Carbon::parse($time_in)->format('h:i:s A'), $id_no);
                                 }
                                 $this->alert('success', 'Successfull Time in');
-                            }else{
+                            } else {
                                 $this->alert('error', 'ID not found.');
                             }
                         } else {
@@ -200,7 +200,26 @@ class AttendanceInterface extends Component
                                     ($existing->time_in_pm and $existing->time_out_pm))
                             )
                         ) {
-                            $this->alert('error', 'No time-IN log found!');
+                            $student = Student::find($id_no);
+                            $hour = Carbon::parse(now())->format('H');
+                            $attendance = AttendanceStudent::firstOrCreate([
+                                'student_id' => $id_no,
+                                'dtr_date' => $this->dtr_date,
+                                'level_id' => $student->level_id,
+                            ]);
+                            $hour = Carbon::parse(now())->format('H');
+
+                            if ($hour <= 12 && !$attendance->time_out_am)
+                                $attendance->time_out_am = $time_out = now();
+                            else
+                                $attendance->time_out_pm = $time_out = now();
+
+                            $attendance->save();
+
+                            if ($student->notify_sms) {
+                                $this->send_message($student->contact_no, $student->fullname() . ' has timed-OUT on ' . Carbon::parse($time_out)->format('h:i:s A'), $id_no);
+                            }
+                            $this->alert('success', 'Successfull time-OUT');
                         } else {
                             $student = Student::find($id_no);
                             $hour = Carbon::parse(now())->format('H');
@@ -211,7 +230,7 @@ class AttendanceInterface extends Component
                                 $time_out = $existing->time_out_pm = now();
 
                             $existing->save();
-                            if($student->notify_sms){
+                            if ($student->notify_sms) {
                                 $this->send_message($student->contact_no, $student->fullname() . ' has timed-OUT on ' . Carbon::parse($time_out)->format('h:i:s A'), $id_no);
                             }
                             $this->alert('success', 'Successfull time-OUT');
